@@ -1,0 +1,53 @@
+import mongoose from "mongoose";
+
+import nanoid from "../utils/nanoid";
+
+const { Schema } = mongoose;
+
+const PaymentsFailedSchema = new Schema(
+  {
+    uid: {
+      type: String,
+      default: nanoid(),
+      unique: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ["failure"],
+    },
+    conversationId: {
+      type: String,
+      required: true,
+    },
+    errorCode: {
+      type: String,
+      required: true,
+    },
+    errorMessage: {
+      type: String,
+      required: true,
+    },
+    log: {
+      type: Schema.Types.Mixed,
+      required: true,
+    },
+  },
+  {
+    id: true,
+    collection: "payments-failed",
+    timeStamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.__v;
+
+        return {
+          ...ret,
+        };
+      },
+    },
+  }
+);
+const PaymentsFailed = mongoose.model("PaymentsFailed", PaymentsFailedSchema);
+
+export default PaymentsFailed;

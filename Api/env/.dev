@@ -1,0 +1,5 @@
+DEPLOYMENT=DEVELOPMENT
+HTTPS_ENABLED=true
+PORT=443
+LOGGER=dev
+MONGO_URI=mongodb+srv://ahmet:unsal.1453@cluster0.wwntm.mongodb.net/?retryWrites=true&w=majority
