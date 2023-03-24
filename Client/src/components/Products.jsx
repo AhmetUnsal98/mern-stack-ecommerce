@@ -22,8 +22,8 @@ const Products = ({ cat, filters, sort }) => {
       try {
         const res = await axios.get(
           cat
-            ? `https://ecommerce-ahmet-clothing.netlify.app/api/products?category=${cat}`
-            : `https://ecommerce-ahmet-clothing.netlify.app/api/products`
+            ? `https://clothing-shop-ahmet-api.onrender.com/api/products/api/products?category=${cat}`
+            : `https://clothing-shop-ahmet-api.onrender.com/api/products/api/products`
         );
         setProducts(res.data);
       } catch (error) {
