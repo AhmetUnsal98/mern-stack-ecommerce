@@ -28,6 +28,7 @@ const Container = styled.div`
   flex: 1;
   margin: 5px;
   min-width: 240px;
+  max-width: 320px;
   height: 320px;
   display: flex;
   align-items: center;
