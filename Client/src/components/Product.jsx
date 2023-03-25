@@ -4,7 +4,7 @@ import {
   ShoppingCartOutlined,
 } from "@material-ui/icons";
 import React from "react";
-
+import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -27,8 +27,8 @@ const Info = styled.div`
 const Container = styled.div`
   flex: 1;
   margin: 5px;
-  min-width: 280px;
-  height: 350px;
+  min-width: 240px;
+  height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,15 +1,22 @@
 import { Badge } from "@material-ui/core";
-import { Search, ShoppingCartOutlined } from "@material-ui/icons";
+import {
+  ArrowRightSharp,
+  CloseSharp,
+  PersonOutline,
+  Search,
+  ShoppingCartOutlined,
+} from "@material-ui/icons";
+import { MenuOutlined } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { publicRequest } from "../requestMethods";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { MdAccountCircle } from "react-icons/md";
+import { MdAccountCircle, MdLogout } from "react-icons/md";
 import { logout } from "../redux/userRedux";
 
-const OutConteiner = styled.div`
+const GeneralConteiner = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,6 +43,7 @@ const Left = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
+  ${mobile({ marginBottom: "0.5rem" })}
 `;
 
 const SearchContainer = styled.div`
@@ -77,7 +85,9 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  ${mobile({ flex: 2, justifyContent: "center", margin: "0 1rem 0 1rem" })}
+  ${mobile({
+    display: "none",
+  })}
 `;
 
 const MenuItem = styled.div`
@@ -151,12 +161,70 @@ const SearchRightConteiner = styled.div`
   align-items: center;
   height: auto;
 `;
+const MenuMobile = styled.div`
+  display: none;
+  ${mobile({
+    width: "100vw",
+    height: "5vh",
+    marginTop: "0.2rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+  })}
+`;
+const MenuDrawer = styled.div`
+  width: 65vw;
+  z-index: 999;
+  background-color: white;
+  opacity: 0.98;
+  height: 200vh;
+  left: 0;
+  top: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+`;
+const DrawerInnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  position: relative;
+`;
+const DrawerItem = styled.div`
+  width: 85%;
+  height: 3vh;
+  margin: 0.5rem;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+const DrawerItemText = styled.p`
+  color: gray;
+  font-size: 1.2rem;
+`;
 const Navbar = () => {
   const quantity = useSelector((state) => state.cart.cartTotalQuantity);
   const user = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState();
+
+  const [drawerMenu, setDrawerMenu] = useState("menu");
+  const [openMenu, setOpenMenu] = useState(false);
+
+  const handleDrawerType = (drawerType) => {
+    setDrawerMenu(drawerType);
+    if (openMenu) {
+      setOpenMenu(false);
+      document.body.style.overflow = "";
+    } else {
+      setOpenMenu(true);
+      document.body.style.overflow = "hidden";
+    }
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -175,7 +243,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <OutConteiner>
+    <GeneralConteiner>
       <Container>
         <Wrapper>
           <Left>
@@ -195,7 +263,6 @@ const Navbar = () => {
               <Search
                 style={{
                   color: "gray",
-
                   display: "inline-block",
                 }}
               />
@@ -213,7 +280,10 @@ const Navbar = () => {
                 })
                 .map((item) => {
                   return (
-                    <Link to={`/product/${item._id}`}>
+                    <Link
+                      to={`/product/${item._id}`}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
                       <SearchInnerTermConteiner>
                         <SearchLeftConteiner>
                           <Image src={item.image} />
@@ -270,9 +340,160 @@ const Navbar = () => {
               </MenuItem>
             </Link>
           </Right>
+          <MenuMobile>
+            <MenuOutlined
+              onClick={() => {
+                handleDrawerType("menu");
+              }}
+              size={30}
+              color="black"
+            />
+            <Link to="/cart">
+              <MenuItem>
+                <Badge overlap="rectangular" badgeContent={quantity}>
+                  <ShoppingCartOutlined />
+                </Badge>
+              </MenuItem>
+            </Link>
+            <PersonOutline
+              onClick={() => {
+                handleDrawerType("profile");
+              }}
+              size={30}
+              color="black"
+            />
+          </MenuMobile>
         </Wrapper>
       </Container>
-    </OutConteiner>
+      <MenuDrawer
+        style={openMenu === true ? { display: "flex" } : { display: "none" }}
+      >
+        {drawerMenu === "profile" ? (
+          <DrawerInnerContainer>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                margin: "0.5rem",
+              }}
+            >
+              <Logo>Profile</Logo>
+              <CloseSharp
+                onClick={() => {
+                  handleDrawerType("none");
+                }}
+                size={30}
+                color="white"
+              />
+            </div>
+            {user ? null : (
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <DrawerItem>
+                  <DrawerItemText>Sign In</DrawerItemText>
+                  <ArrowRightSharp color="lightgray" size={20} />
+                </DrawerItem>
+              </Link>
+            )}
+            {user ? null : (
+              <Link
+                to="/register"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <DrawerItem>
+                  <DrawerItemText>Sign Up</DrawerItemText>
+                  <ArrowRightSharp color="lightgray" size={20} />
+                </DrawerItem>
+              </Link>
+            )}
+            {user && (
+              <DrawerItem>
+                <DrawerItemText>My Profile</DrawerItemText>
+                <ArrowRightSharp color="lightgray" size={20} />
+              </DrawerItem>
+            )}
+            {user && (
+              <Link
+                to="/userorders"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <DrawerItem>
+                  <DrawerItemText>My Orders</DrawerItemText>
+                  <ArrowRightSharp color="lightgray" size={20} />
+                </DrawerItem>
+              </Link>
+            )}
+            {user && (
+              <DrawerItem>
+                <DrawerItemText>Supports</DrawerItemText>
+                <ArrowRightSharp color="lightgray" size={20} />
+              </DrawerItem>
+            )}
+            {user && (
+              <DrawerItem onClick={handleLogout}>
+                <DrawerItemText>Logout</DrawerItemText>
+                <MdLogout color="black" size={20} />
+              </DrawerItem>
+            )}
+          </DrawerInnerContainer>
+        ) : (
+          <DrawerInnerContainer>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                margin: "0.5rem",
+              }}
+            >
+              <Logo>Menu</Logo>
+              <CloseSharp
+                onClick={() => {
+                  handleDrawerType("none");
+                }}
+                size={30}
+                color="white"
+              />
+            </div>
+
+            <DrawerItem>
+              <DrawerItemText>Home</DrawerItemText>
+              <ArrowRightSharp color="lightgray" size={20} />
+            </DrawerItem>
+            <DrawerItem>
+              <DrawerItemText>Products</DrawerItemText>
+              <ArrowRightSharp color="lightgray" size={20} />
+            </DrawerItem>
+            <Logo
+              style={{
+                margin: "0.5rem",
+              }}
+            >
+              Categories
+            </Logo>
+            <DrawerItem>
+              <DrawerItemText>All</DrawerItemText>
+              <ArrowRightSharp color="lightgray" size={20} />
+            </DrawerItem>
+            <DrawerItem>
+              <DrawerItemText>T-shirt</DrawerItemText>
+              <ArrowRightSharp color="lightgray" size={20} />
+            </DrawerItem>
+            <DrawerItem>
+              <DrawerItemText>Loungewear</DrawerItemText>
+              <ArrowRightSharp color="lightgray" size={20} />
+            </DrawerItem>
+            <DrawerItem>
+              <DrawerItemText>Light Jackets</DrawerItemText>
+              <ArrowRightSharp color="lightgray" size={20} />
+            </DrawerItem>
+          </DrawerInnerContainer>
+        )}
+      </MenuDrawer>
+    </GeneralConteiner>
   );
 };
 

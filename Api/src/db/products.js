@@ -78,7 +78,7 @@ Products.starterData = [
     color: "green",
 
     image:
-      "https://firebasestorage.googleapis.com/v0/b/ecommerceadmin-80d08.appspot.com/o/1664438299613Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg%20(1).png?alt=media&token=0a1c7da6-f672-412b-b531-da86880bbe18",
+      "https://img.freepik.com/free-photo/graphic-tshirt-trendy-design-mockup-presented-wooden-hanger_460848-13975.jpg?w=740&t=st=1679717554~exp=1679718154~hmac=f5c90139b84f1139decd7a9aa6e9664342471a35588ade914b94b5ff4302123e",
 
     categories: ["loungewear"],
     brand: "Versace",
@@ -96,7 +96,7 @@ Products.starterData = [
     color: "red",
 
     image:
-      "https://firebasestorage.googleapis.com/v0/b/ecommerceadmin-80d08.appspot.com/o/1664438299613Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg%20(1).png?alt=media&token=0a1c7da6-f672-412b-b531-da86880bbe18",
+      "https://img.freepik.com/free-photo/trendy-top-design-mockup-presented-wooden-hanger_460848-13969.jpg?w=740&t=st=1679717519~exp=1679718119~hmac=6bdad59deb65653ea3938fb0d1fb703d81bbbcacf0f32ded3dec370a7277f75a",
     categories: ["loungewear"],
     brand: "Versace",
     price: 10000,
@@ -113,7 +113,7 @@ Products.starterData = [
     color: "black",
 
     image:
-      "https://firebasestorage.googleapis.com/v0/b/ecommerceadmin-80d08.appspot.com/o/1664438299613Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg%20(1).png?alt=media&token=0a1c7da6-f672-412b-b531-da86880bbe18",
+      "https://img.freepik.com/free-psd/chromatees-tshirt-mockup_126278-25.jpg?w=996&t=st=1679717632~exp=1679718232~hmac=234b24a8a1847cdd76677c3baa84a9f61e70aaeaea9cacc18fc1dead016b8247",
     categories: ["tshirt"],
     brand: "Versace",
     price: 10000,
@@ -130,7 +130,7 @@ Products.starterData = [
     color: "black",
 
     image:
-      "https://firebasestorage.googleapis.com/v0/b/ecommerceadmin-80d08.appspot.com/o/1664438299613Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg%20(1).png?alt=media&token=0a1c7da6-f672-412b-b531-da86880bbe18",
+      "https://img.freepik.com/free-photo/isolated-opened-black-t-shirt_125540-1451.jpg?w=900&t=st=1679717683~exp=1679718283~hmac=f9c3b6a0e2a1f0994d3a966dc6686811e657869e0c998d287a7f789119b3d801",
 
     categories: ["tshirt"],
     brand: "Versace",
@@ -148,7 +148,7 @@ Products.starterData = [
     color: "black",
 
     image:
-      "https://firebasestorage.googleapis.com/v0/b/ecommerceadmin-80d08.appspot.com/o/1664438299613Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg%20(1).png?alt=media&token=0a1c7da6-f672-412b-b531-da86880bbe18",
+      "https://img.freepik.com/premium-photo/womens-red-leather-jacket-isolated-white-background_125604-212.jpg?w=740",
     categories: ["jacket"],
     brand: "Prada",
     price: 10000,
@@ -158,14 +158,14 @@ Products.starterData = [
   },
   {
     _id: mongoose.Types.ObjectId("61d054e5a2f56187efb0a3c0"),
-    name: "Light Jacket Black",
+    name: "Light White Jacket",
     title: "Prada Jacket Black",
     desc: "Good Jacket",
     size: ["s", "m", "l"],
-    color: "black",
+    color: "white",
 
     image:
-      "https://firebasestorage.googleapis.com/v0/b/ecommerceadmin-80d08.appspot.com/o/1664438299613Mens-Jake-Guitar-Vintage-Crusher-Tee_68382_1_lg%20(1).png?alt=media&token=0a1c7da6-f672-412b-b531-da86880bbe18",
+      "https://img.freepik.com/free-psd/white-jacket-floating-white_176382-1844.jpg?w=740&t=st=1679717936~exp=1679718536~hmac=49fa560baee55f4ba30ba07a2d86273d8b7c13429a5abd1b6c4f09d5f4769ef8",
 
     categories: ["jacket"],
     brand: "Prada",
