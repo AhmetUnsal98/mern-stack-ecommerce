@@ -20,10 +20,12 @@ const Wrapper = styled.div`
 
 const ImgContainer = styled.div`
   flex: 1;
+  max-width: 1182px;
 `;
 
 const Image = styled.img`
-  height: 90vh;
+  height: 100%;
+  width: 100%;
   object-fit: contain;
   ${mobile({ height: "40vh" })}
 `;
