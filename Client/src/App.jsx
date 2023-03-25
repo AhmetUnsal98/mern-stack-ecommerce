@@ -18,7 +18,7 @@ import UserOrders from "./pages/UserOrders";
 
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
-
+  console.log(user);
   return (
     <Router>
       <Switch>

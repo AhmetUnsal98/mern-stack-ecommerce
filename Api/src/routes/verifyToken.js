@@ -1,43 +1,37 @@
-import { jwt } from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
-//Middleware for generating tokens for requests
 const verifyToken = (req, res, next) => {
-  //Get headers from requests and pass them to middleware
   const authHeader = req.headers.token;
 
-  //Check is there a token
   if (authHeader) {
-    //Take token from auth headers
     const token = authHeader;
-    //Verify token with jwt secret password
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) res.status(403).json("Token is invalid");
+      if (err) res.status(403).json("Token is not valid!");
       req.user = user;
-
       next();
     });
   } else {
-    return res.status(401).json(err);
+    return res.status(401).json("You are not authenticated!");
   }
 };
 
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.userId || req.user.isAdmin) {
-      return next();
+    if (req.user.id === req.params.id || req.user.isAdmin) {
+      next();
     } else {
-      return res.status(403).json("You are not allowed to access this");
+      res.status(403).json("You are not alowed to do that!");
     }
   });
 };
 
 const verifyTokenAndAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.role === "admin") {
+    if (req.user.isAdmin) {
       next();
     } else {
-      res.status(403).json("You are not allowed to access this");
+      res.status(403).json("You are not alowed to do that!");
     }
   });
 };

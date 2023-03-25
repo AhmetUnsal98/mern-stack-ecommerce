@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://clothing-shop-ahmet-api.onrender.com/api";
+const BASE_URL = "https://localhost:443/api";
 
 const user = JSON.parse(localStorage.getItem("persist:root"))?.user;
 const currentUser = user && JSON.parse(user).currentUser;
@@ -9,5 +9,5 @@ export const publicRequest = axios.create({
 });
 export const userRequest = axios.create({
   baseURL: BASE_URL,
-  headers: { token: `${TOKEN}` },
+  headers: { token: TOKEN },
 });
