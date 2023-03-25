@@ -74,6 +74,7 @@ const Error = styled.p`
 `;
 const OrderUserLogin = () => {
   const dispatch = useDispatch();
+
   const [name, setName] = useState("");
   const [nameError, setErrorName] = useState(false);
   const [surname, setSurname] = useState("");
@@ -158,7 +159,13 @@ const OrderUserLogin = () => {
             ></Input>
           </InnerFormConteiner>
           <InnerFormConteiner>
-            <Button onClick={handleLogin}>Sign In</Button>
+            <Button
+              onClick={() => {
+                handleLogin();
+              }}
+            >
+              Sign In
+            </Button>
           </InnerFormConteiner>
         </LoginConteiner>
         <LoginConteiner>
