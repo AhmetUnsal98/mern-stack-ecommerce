@@ -1,28 +1,28 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { login, loginGuest } from "../redux/apiCalls";
-
+import { login, loginGuest } from "../api/userAPI";
 import { mobile } from "../responsive";
 import { useState } from "react";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import PasswordIcon from "@mui/icons-material/Password";
-
 import Navbar from "../components/Navbar";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
-
+import { useInputs } from "../hooks/useInputs";
 const Conteiner = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  ${mobile({ height: "auto" })}
+
+  ${mobile({ height: "auto", alignItems: "center" })}
 `;
 const Header = styled.h1`
   padding: 6px;
   margin-bottom: 12px;
+  ${mobile({ marginBottom: "2px", fontSize: "24px" })}
 `;
 const FormConteiner = styled.div`
   display: flex;
@@ -30,13 +30,14 @@ const FormConteiner = styled.div`
   justify-content: center;
   margin-top: 24px;
   height: 70%;
-  ${mobile({ flexDirection: "column", width: "100vw" })}
+  ${mobile({ flexDirection: "column", width: "88vw" })}
 `;
 const InnerFormConteiner = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 32px;
   width: 100%;
+  ${mobile({ marginTop: "6px" })}
 `;
 const LoginConteiner = styled.div`
   width: 40%;
@@ -50,6 +51,7 @@ const LoginConteiner = styled.div`
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: "12px",
   })}
 `;
 const Input = styled.input`
@@ -58,6 +60,7 @@ const Input = styled.input`
   font-size: 22px;
   border: 0.5px solid lightgray;
   padding: 8px;
+  ${mobile({ fontSize: "18px" })}
 `;
 const Button = styled.button`
   width: 100%;
@@ -67,6 +70,8 @@ const Button = styled.button`
   font-size: 32px;
   font-weight: 600;
   border: 0.5px solid lightgray;
+  cursor: pointer;
+  ${mobile({ marginTop: "6px", fontSize: "24px" })}
 `;
 const Error = styled.p`
   color: red;
@@ -75,56 +80,60 @@ const Error = styled.p`
 const OrderUserLogin = () => {
   const dispatch = useDispatch();
 
-  const [name, setName] = useState("");
-  const [nameError, setErrorName] = useState(false);
-  const [surname, setSurname] = useState("");
-  const [surnameError, setErrorSurName] = useState(false);
-  const [email, setEmail] = useState("");
-  const [emailError, setErrorEmail] = useState(false);
-  const [password, setPassword] = useState("");
-  const [passwordError, setErrorPassword] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [phoneError, setErrorPhone] = useState(false);
+  const [inputs, setInputs] = useInputs({
+    email: "",
+    emailError: false,
+    password: "",
+    passwordError: false,
+    phone: "",
+    phoneError: false,
+  });
+
   const [error, setError] = useState(false);
   const [pageStart, setPageStart] = useState(false);
+
   const validate = () => {
-    if (!name) {
+    if (!inputs.email) {
       setError(true);
-      setErrorName(true);
+      inputs.emailError = true;
     } else {
       setError(false);
-      setErrorName(false);
+      inputs.emailError = false;
     }
-    if (!surname) {
+    if (!inputs.password) {
       setError(true);
-      setErrorSurName(true);
+      inputs.passwordError = true;
     } else {
       setError(false);
-      setErrorSurName(false);
+      inputs.passwordError = false;
     }
-    if (!email) {
+    if (!inputs.phone) {
       setError(true);
-      setErrorEmail(true);
+      inputs.phoneError = true;
     } else {
       setError(false);
-      setErrorEmail(false);
-    }
-    if (!phone) {
-      setError(true);
-      setErrorPhone(true);
-    } else {
-      setError(false);
-      setErrorPhone(false);
+      inputs.phonedError = false;
     }
   };
 
-  const handleGoShopping = () => {
-    console.log("click");
+  const handleLoginAsGuest = async () => {
     setPageStart(true);
-    email && loginGuest(dispatch, { email });
+    const email = inputs.email;
+    const phone = inputs.phone;
+    try {
+      if (email && phone) await loginGuest(dispatch, { email });
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const handleLogin = () => {
-    login(dispatch, { email, password });
+  const handleLogin = async () => {
+    const email = inputs.email;
+    const password = inputs.password;
+    try {
+      await login(dispatch, { email, password });
+    } catch (error) {
+      console.error(error);
+    }
   };
   useEffect(() => {
     pageStart && validate();
@@ -143,7 +152,12 @@ const OrderUserLogin = () => {
                 style={{ fontSize: "40px", color: "white", padding: "8px" }}
               />
             </div>
-            <Input placeholder="E-mail"></Input>
+            <Input
+              placeholder="E-mail"
+              name="email"
+              value={inputs.email}
+              onChange={setInputs}
+            ></Input>
           </InnerFormConteiner>
 
           <InnerFormConteiner>
@@ -155,7 +169,9 @@ const OrderUserLogin = () => {
             <Input
               placeholder="password"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={inputs.password}
+              onChange={setInputs}
             ></Input>
           </InnerFormConteiner>
           <InnerFormConteiner>
@@ -179,10 +195,13 @@ const OrderUserLogin = () => {
             </div>
             <Input
               placeholder="E-mail"
-              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              name="email"
+              value={inputs.email}
+              onChange={setInputs}
             ></Input>
           </InnerFormConteiner>
-          {emailError && (
+          {inputs.emailError && (
             <Error style={{ textAlign: "center" }}>E-mail is required</Error>
           )}
 
@@ -194,17 +213,20 @@ const OrderUserLogin = () => {
             </div>
             <Input
               placeholder="Phone Number"
-              onChange={(e) => setPhone(e.target.value)}
+              type="phone"
+              name="phone"
+              value={inputs.phone}
+              onChange={setInputs}
             ></Input>
           </InnerFormConteiner>
-          {phoneError && (
+          {inputs.phoneError && (
             <Error style={{ textAlign: "center" }}>
               Phone number is required
             </Error>
           )}
 
           <InnerFormConteiner>
-            <Button onClick={() => handleGoShopping()}>Go Shopping</Button>
+            <Button onClick={() => handleLoginAsGuest()}>Go Shopping</Button>
           </InnerFormConteiner>
         </LoginConteiner>
       </FormConteiner>

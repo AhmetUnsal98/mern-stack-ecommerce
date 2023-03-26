@@ -6,7 +6,7 @@ import { mobile } from "../responsive";
 import { userRequest } from "../requestMethods";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import axios from "axios";
+import MainLayout from "../layouts/MainLayout";
 const Conteiner = styled.div`
   height: 100vh;
   width: 100vw;
@@ -60,56 +60,54 @@ const UserOrders = () => {
   }, []);
 
   return (
-    <Conteiner>
-      <Announcement />
-      <Navbar />
-
-      <OrderRow>
-        <OrderRowBox>
-          <OrderRowText>Products</OrderRowText>
-        </OrderRowBox>
-        <OrderRowBox>
-          <OrderRowText>Address</OrderRowText>
-        </OrderRowBox>
-        <OrderRowBox>
-          <OrderRowText>Amount</OrderRowText>
-        </OrderRowBox>
-        <OrderRowBox>
-          <OrderRowText>Status</OrderRowText>
-        </OrderRowBox>
-        <OrderRowBox>
-          <OrderRowText>Proccess</OrderRowText>
-        </OrderRowBox>
-      </OrderRow>
-      {orders?.map((order) => (
+    <MainLayout>
+      <Conteiner>
         <OrderRow>
           <OrderRowBox>
-            <OrderRowText>
-              {order.products?.map((product) => (
-                <p style={{ borderBottom: "1px solid black" }}>
-                  {product.title}
-                </p>
-              ))}
-            </OrderRowText>
+            <OrderRowText>Products</OrderRowText>
           </OrderRowBox>
           <OrderRowBox>
-            <OrderRowText>{order.address}</OrderRowText>
+            <OrderRowText>Address</OrderRowText>
           </OrderRowBox>
           <OrderRowBox>
-            <OrderRowText>{order.amount}$</OrderRowText>
+            <OrderRowText>Amount</OrderRowText>
           </OrderRowBox>
           <OrderRowBox>
-            <OrderRowText>{order.status}</OrderRowText>
+            <OrderRowText>Status</OrderRowText>
           </OrderRowBox>
           <OrderRowBox>
-            <OrderRowText>
-              <Button>Cancel</Button>
-            </OrderRowText>
+            <OrderRowText>Proccess</OrderRowText>
           </OrderRowBox>
         </OrderRow>
-      ))}
-      <Footer />
-    </Conteiner>
+        {orders?.map((order) => (
+          <OrderRow>
+            <OrderRowBox>
+              <OrderRowText>
+                {order.products?.map((product) => (
+                  <p style={{ borderBottom: "1px solid black" }}>
+                    {product.title}
+                  </p>
+                ))}
+              </OrderRowText>
+            </OrderRowBox>
+            <OrderRowBox>
+              <OrderRowText>{order.address}</OrderRowText>
+            </OrderRowBox>
+            <OrderRowBox>
+              <OrderRowText>{order.amount}$</OrderRowText>
+            </OrderRowBox>
+            <OrderRowBox>
+              <OrderRowText>{order.status}</OrderRowText>
+            </OrderRowBox>
+            <OrderRowBox>
+              <OrderRowText>
+                <Button>Cancel</Button>
+              </OrderRowText>
+            </OrderRowBox>
+          </OrderRow>
+        ))}
+      </Conteiner>
+    </MainLayout>
   );
 };
 

@@ -41,7 +41,6 @@ const Wrapper = styled.div`
 
 const Slide = styled.div`
   width: 100vw;
-
   display: flex;
   align-items: center;
   background-color: #${(props) => props.bg};

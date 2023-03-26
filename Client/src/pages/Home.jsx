@@ -1,13 +1,10 @@
 import React from "react";
-import Announcement from "../components/Announcement";
 import Categories from "../components/Categories";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import NewestProducts from "../components/NewestProducts";
 import Slider from "../components/Slider";
 import styled from "styled-components";
-import { mobile } from "../responsive";
+import MainLayout from "../layouts/MainLayout";
 const Header = styled.h1`
   font-size: "14px";
   color: black;
@@ -17,16 +14,13 @@ const Header = styled.h1`
 
 const Home = () => {
   return (
-    <div style={{}}>
-      <Announcement />
-      <Navbar />
+    <MainLayout>
       <Slider />
       <Categories />
       <Header>Newest Products</Header>
       <NewestProducts />
       <Newsletter />
-      <Footer />
-    </div>
+    </MainLayout>
   );
 };
 

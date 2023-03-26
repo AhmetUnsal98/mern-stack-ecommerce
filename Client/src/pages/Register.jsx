@@ -1,10 +1,8 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import { publicRequest } from "../requestMethods";
-import { login } from "../redux/apiCalls";
+import { register } from "../api/userAPI";
 import { useDispatch } from "react-redux";
-
+import { useInputs } from "../hooks/useInputs";
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -59,28 +57,24 @@ const Button = styled.button`
 `;
 
 const Register = () => {
-  const [name, SetName] = useState("");
-  const [lastname, SetLastName] = useState("");
-  const [phone, SetPhoneNumber] = useState("");
-  const [email, SetEmail] = useState("");
-  const [password, SetPassword] = useState("");
+  const [inputs, setInputs] = useInputs({
+    name: "",
+    surname: "",
+    phone: "",
+    email: "",
+    password: "",
+  });
   const dispatch = useDispatch();
-
   const registerHandler = async (e) => {
     e.preventDefault();
-    try {
-      const res = await publicRequest.post("/register", {
-        name: name,
-        surname: lastname,
-
-        email: email,
-        role: "user",
-        password: password,
-        locale: "tr",
-      });
-      console.log(res);
-      login(dispatch, { email, password });
-    } catch (error) {}
+    const user = {
+      name: inputs.name,
+      surname: inputs.surname,
+      phone: inputs.phone,
+      email: inputs.email,
+      password: inputs.password,
+    };
+    await register(dispatch, user);
   };
 
   return (
@@ -90,36 +84,36 @@ const Register = () => {
         <Form>
           <Input
             placeholder="name"
-            onChange={(e) => {
-              SetName(e.target.value);
-            }}
+            name="name"
+            value={inputs.name}
+            onChange={setInputs}
           />
           <Input
-            placeholder="last name"
-            onChange={(e) => {
-              SetLastName(e.target.value);
-            }}
+            placeholder="surname"
+            name="surname"
+            value={inputs.surname}
+            onChange={setInputs}
           />
           <Input
             placeholder="phone"
-            onChange={(e) => {
-              SetPhoneNumber(e.target.value);
-            }}
+            name="phone"
+            value={inputs.phone}
+            onChange={setInputs}
           />
           <Input
             placeholder="email"
-            onChange={(e) => {
-              SetEmail(e.target.value);
-            }}
+            name="email"
+            value={inputs.email}
+            onChange={setInputs}
           />
           <Input
-            placeholder="password"
             type="password"
-            onChange={(e) => {
-              SetPassword(e.target.value);
-            }}
+            placeholder="password"
+            name="password"
+            value={inputs.password}
+            onChange={setInputs}
           />
-          <Input placeholder="confirm password" />
+          <Input type="password" placeholder="confirm password" />
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>

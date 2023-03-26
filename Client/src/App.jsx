@@ -18,45 +18,46 @@ import UserOrders from "./pages/UserOrders";
 
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
-  console.log(user);
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/products">
-          <ProductList />
-        </Route>
-
-        <Route path="/product/:id">
-          <Product />
-        </Route>
-        <Route exact path="/orderuserlogin">
-          <OrderUserLogin />
-        </Route>
-
-        <Route path="/checkout">
-          {user ? <Checkout /> : <OrderUserLogin />}
-        </Route>
-        <Route path="/cart">
-          <Cart />
-        </Route>
-        <Route path="/success">
-          <Success />
-        </Route>
-        {user && (
-          <Route path="/userorders">
-            <UserOrders />
+    <div style={{ width: "100vw", height: "auto", overflowX: "hidden" }}>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Home />
           </Route>
-        )}
+          <Route path="/products">
+            <ProductList />
+          </Route>
 
-        <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
-        <Route path="/register">
-          {user ? <Redirect to="/" /> : <Register />}
-        </Route>
-      </Switch>
-    </Router>
+          <Route path="/product/:id">
+            <Product />
+          </Route>
+          <Route exact path="/orderuserlogin">
+            <OrderUserLogin />
+          </Route>
+
+          <Route path="/checkout">
+            {user ? <Checkout /> : <OrderUserLogin />}
+          </Route>
+          <Route path="/cart">
+            <Cart />
+          </Route>
+          <Route path="/success">
+            <Success />
+          </Route>
+          {user && (
+            <Route path="/userorders">
+              <UserOrders />
+            </Route>
+          )}
+
+          <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
+          <Route path="/register">
+            {user ? <Redirect to="/" /> : <Register />}
+          </Route>
+        </Switch>
+      </Router>
+    </div>
   );
 };
 

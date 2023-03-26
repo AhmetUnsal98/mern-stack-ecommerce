@@ -21,7 +21,9 @@ const GeneralConteiner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  ${mobile({ position: "relative" })}
+  box-shadow: 0px 2px 12px 0px gray;
+  margin-bottom: 0.5rem;
+  ${mobile({ position: "relative" })};
 `;
 
 const Container = styled.div`
@@ -33,7 +35,6 @@ const Container = styled.div`
 const Wrapper = styled.div`
   padding: 10px 20px;
   display: flex;
-
   align-items: center;
   justify-content: space-between;
   ${mobile({ padding: "10px 0px", flexDirection: "column" })}
