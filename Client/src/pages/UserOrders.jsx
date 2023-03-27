@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Announcement from "../components/Announcement";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import { userRequest } from "../requestMethods";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import MainLayout from "../layouts/MainLayout";
 import { getUserOrders } from "../api/fetchAPI";
+import Order from "../components/Order";
 const Conteiner = styled.div`
   height: 100vh;
   width: 100vw;
@@ -32,18 +29,6 @@ const OrderRowText = styled.p`
   font-weight: 500;
   color: black;
   ${mobile({ fontSize: "10px" })}
-`;
-const Button = styled.button`
-  background-color: transparent;
-  border: 1px solid red;
-  padding: 10px;
-  border-radius: 2px;
-  color: red;
-  &:hover {
-    background-color: red;
-    color: white;
-    transition: 1s;
-  }
 `;
 const UserOrders = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -81,31 +66,7 @@ const UserOrders = () => {
           </OrderRowBox>
         </OrderRow>
         {orders?.map((order) => (
-          <OrderRow>
-            <OrderRowBox>
-              <OrderRowText>
-                {order.products?.map((product) => (
-                  <p style={{ borderBottom: "1px solid black" }}>
-                    {product.title}
-                  </p>
-                ))}
-              </OrderRowText>
-            </OrderRowBox>
-            <OrderRowBox>
-              <OrderRowText>{order.address}</OrderRowText>
-            </OrderRowBox>
-            <OrderRowBox>
-              <OrderRowText>{order.amount}$</OrderRowText>
-            </OrderRowBox>
-            <OrderRowBox>
-              <OrderRowText>{order.status}</OrderRowText>
-            </OrderRowBox>
-            <OrderRowBox>
-              <OrderRowText>
-                <Button>Cancel</Button>
-              </OrderRowText>
-            </OrderRowBox>
-          </OrderRow>
+          <Order order={order} />
         ))}
       </Conteiner>
     </MainLayout>

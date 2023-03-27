@@ -8,8 +8,8 @@ import {
   Twitter,
 } from "@material-ui/icons";
 import styled from "styled-components";
-import { mobile } from "../responsive";
-import Odemeimage from "../assets/odeme.png";
+import { mobile } from "../../responsive";
+import Odemeimage from "../../assets/odeme.png";
 import React from "react";
 const Container = styled.div`
   display: flex;

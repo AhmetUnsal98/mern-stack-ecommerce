@@ -9,12 +9,12 @@ import {
 import { MenuOutlined } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { mobile } from "../responsive";
-import { publicRequest } from "../requestMethods";
+import { mobile } from "../../responsive";
+import { publicRequest } from "../../requestMethods";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { MdAccountCircle, MdLogout } from "react-icons/md";
-import { logout } from "../redux/userRedux";
+import { logout } from "../../redux/userRedux";
 
 const GeneralConteiner = styled.div`
   display: flex;

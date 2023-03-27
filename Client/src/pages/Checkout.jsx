@@ -12,7 +12,8 @@ import Modal from "react-modal";
 import { useHistory } from "react-router-dom";
 import { useInputs } from "../hooks/useInputs";
 import MainLayout from "../layouts/MainLayout";
-
+import { paymentNormal, paymentThreeDs } from "../api/paymentAPI";
+import { createOrder } from "../api/orderAPI";
 const Conteiner = styled.div`
   width: 100vw;
   height: auto;
@@ -202,17 +203,19 @@ const Checkout = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   //Create a new Order
-  const createOrder = async () => {
+  const handleCreateOrder = async () => {
+    const order = {
+      userId: user._id,
+      locale: "tr",
+      products: cart.products,
+      amount: cart.cartTotalAmount,
+      address: inputs.address,
+      status: "pending",
+    };
     try {
-      const res = await userRequest.post("/createOrder", {
-        userId: user._id,
-        locale: "tr",
-        products: cart.products,
-        amount: cart.cartTotalAmount,
-        address: inputs.address,
-        status: "pending",
+      await createOrder(order).then(function (result) {
+        console.log(result);
       });
-      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -221,110 +224,110 @@ const Checkout = () => {
   //Get normal payment
   const handlePayment = async (e) => {
     setProducts(cart.products);
+    const paymentInformations = {
+      price: cart.cartTotalAmount,
+      basketId: user ? user._id : "1231231",
+      products: cart.products,
+      paymentCard: {
+        cardHolderName: inputs.cardName,
+        cardNumber: inputs.cardNumber,
+        expireMonth: inputs.expirationMonth,
+        expireYear: inputs.expirationYear,
+        cvc: inputs.cvc,
+      },
+      buyer: {
+        id: user ? user._id : "1231231",
+        name: inputs.firstName,
+        surname: inputs.lastName,
+        gsmNumber: inputs.phone,
+        email: inputs.email,
+        identityNumber: "0000000000000000000",
+        lastLoginDate: "2020-10-05 12:43:45",
+        registrationDate: "2020-10-04 12:43:45",
+        registrationAddress: inputs.address,
+        ip: "85.34.78.112" /* Kullanıcının IP adresi */,
+        city: inputs.city /* Kullanıcının şehri */,
+        country: inputs.country /* Kullanıcının ülkesi */,
+        zipCode: inputs.zipCode,
+      },
+      shippingAddress: {
+        contactName:
+          inputs.firstName +
+          " " +
+          inputs.lastName /* Teslimat için Kullanıcının Adı */,
+        city: inputs.city /* Teslimat için Kullanıcının Şehri */,
+        country: inputs.country /* Teslimat için Kullanıcının Ülkesi */,
+        address: inputs.address /* Teslimat için Kullanıcının Şehri */,
+        zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
+      },
+    };
     try {
-      const res = await userRequest.post("/payment", {
-        price: cart.cartTotalAmount,
-        basketId: user ? user._id : "1231231",
-        products: cart.products,
-        paymentCard: {
-          cardHolderName: inputs.cardName,
-          cardNumber: inputs.cardNumber,
-          expireMonth: inputs.expirationMonth,
-          expireYear: inputs.expirationYear,
-          cvc: inputs.cvc,
-        },
-        buyer: {
-          id: user ? user._id : "1231231",
-          name: inputs.firstName,
-          surname: inputs.lastName,
-          gsmNumber: inputs.phone,
-          email: inputs.email,
-          identityNumber: "0000000000000000000",
-          lastLoginDate: "2020-10-05 12:43:45",
-          registrationDate: "2020-10-04 12:43:45",
-          registrationAddress: inputs.address,
-          ip: "85.34.78.112" /* Kullanıcının IP adresi */,
-          city: inputs.city /* Kullanıcının şehri */,
-          country: inputs.country /* Kullanıcının ülkesi */,
-          zipCode: inputs.zipCode,
-        },
-        shippingAddress: {
-          contactName:
-            inputs.firstName +
-            " " +
-            inputs.lastName /* Teslimat için Kullanıcının Adı */,
-          city: inputs.city /* Teslimat için Kullanıcının Şehri */,
-          country: inputs.country /* Teslimat için Kullanıcının Ülkesi */,
-          address: inputs.address /* Teslimat için Kullanıcının Şehri */,
-          zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
-        },
+      await paymentNormal(paymentInformations).then(function (result) {
+        if (result.data.status === "success") {
+          handleCreateOrder();
+          dispatch(clearAllCart());
+          history.push("/success");
+        } else {
+          alert("Please check your payment informations");
+        }
       });
-      console.log(res.data);
-
-      if (res.data.status === "success") {
-        createOrder();
-        dispatch(clearAllCart());
-
-        history.push("/Success");
-      } else {
-        alert("Please check your payment informations");
-      }
-    } catch (e) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //Get ThreeDs paymen
   const handlePaymentThreeDs = async (e) => {
-    if (checkPrivacy === true) {
-      setProducts(cart.products);
-      try {
-        const res = await userRequest.post("/payment/threeds", {
-          price: cart.cartTotalAmount,
-          basketId: user._id,
-          products: cart.products,
-          paymentCard: {
-            cardHolderName: inputs.cardName,
-            cardNumber: inputs.cardNumber,
-            expireMonth: inputs.expirationMonth,
-            expireYear: inputs.expirationYear,
-            cvc: inputs.cvc,
-          },
-          buyer: {
-            id: user._id,
-            name: inputs.firstName,
-            surname: inputs.lastName,
-            gsmNumber: inputs.phone,
-            email: inputs.email,
-            identityNumber: "0000000000000000000",
-            lastLoginDate: "2020-10-05 12:43:45",
-            registrationDate: "2020-10-04 12:43:45",
-            registrationAddress: inputs.address,
-            ip: "85.34.78.112" /* Kullanıcının IP adresi */,
-            city: inputs.city /* Kullanıcının şehri */,
-            country: inputs.country /* Kullanıcının ülkesi */,
-            zipCode: inputs.zipCode,
-          },
-          shippingAddress: {
-            contactName:
-              inputs.firstName +
-              " " +
-              inputs.lastName /* Teslimat için Kullanıcının Adı */,
-            city: inputs.city /* Teslimat için Kullanıcının Şehri */,
-            country: inputs.country /* Teslimat için Kullanıcının Ülkesi */,
-            address: inputs.address /* Teslimat için Kullanıcının Şehri */,
-            zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
-          },
-        });
-        console.log("res:" + res.data);
-        if (res.data) {
+    setProducts(cart.products);
+    const paymentInformations = {
+      price: cart.cartTotalAmount,
+      basketId: user ? user._id : "1231231",
+      products: cart.products,
+      paymentCard: {
+        cardHolderName: inputs.cardName,
+        cardNumber: inputs.cardNumber,
+        expireMonth: inputs.expirationMonth,
+        expireYear: inputs.expirationYear,
+        cvc: inputs.cvc,
+      },
+      buyer: {
+        id: user ? user._id : "1231231",
+        name: inputs.firstName,
+        surname: inputs.lastName,
+        gsmNumber: inputs.phone,
+        email: inputs.email,
+        identityNumber: "0000000000000000000",
+        lastLoginDate: "2020-10-05 12:43:45",
+        registrationDate: "2020-10-04 12:43:45",
+        registrationAddress: inputs.address,
+        ip: "85.34.78.112" /* Kullanıcının IP adresi */,
+        city: inputs.city /* Kullanıcının şehri */,
+        country: inputs.country /* Kullanıcının ülkesi */,
+        zipCode: inputs.zipCode,
+      },
+      shippingAddress: {
+        contactName:
+          inputs.firstName +
+          " " +
+          inputs.lastName /* Teslimat için Kullanıcının Adı */,
+        city: inputs.city /* Teslimat için Kullanıcının Şehri */,
+        country: inputs.country /* Teslimat için Kullanıcının Ülkesi */,
+        address: inputs.address /* Teslimat için Kullanıcının Şehri */,
+        zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
+      },
+    };
+    try {
+      paymentThreeDs(paymentInformations).then(function (result) {
+        if (result.data) {
           var x = window.open();
-          x.document.open().write(res.data);
-          createOrder();
+          x.document.open().write(result.data);
+          handleCreateOrder();
           dispatch(clearAllCart());
           history.push("/");
         }
-      } catch (e) {}
-    } else {
-      alert("Please check sure privacy settings");
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
   //Show for another billing inputs
@@ -486,12 +489,20 @@ const Checkout = () => {
                   </select>
                 </InputConteiner>
                 <InputConteiner style={{ marginLeft: "12px", flex: "2" }}>
-                  <PayButton onClick={() => handlePayment()}>
+                  <PayButton
+                    onClick={() => {
+                      handlePayment();
+                    }}
+                  >
                     Go Pay Normal
                   </PayButton>
                 </InputConteiner>
                 <InputConteiner style={{ marginLeft: "12px", flex: "2" }}>
-                  <PayButton onClick={handlePaymentThreeDs}>
+                  <PayButton
+                    onClick={() => {
+                      handlePaymentThreeDs();
+                    }}
+                  >
                     Go Pay With 3D Secure
                   </PayButton>
                 </InputConteiner>

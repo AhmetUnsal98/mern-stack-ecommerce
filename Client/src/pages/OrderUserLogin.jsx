@@ -7,10 +7,8 @@ import { useState } from "react";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import PasswordIcon from "@mui/icons-material/Password";
-import Navbar from "../components/Navbar";
-import Announcement from "../components/Announcement";
-import Footer from "../components/Footer";
 import { useInputs } from "../hooks/useInputs";
+import MainLayout from "../layouts/MainLayout";
 const Conteiner = styled.div`
   width: 100vw;
   height: 100vh;
@@ -140,98 +138,97 @@ const OrderUserLogin = () => {
   });
 
   return (
-    <Conteiner>
-      <Announcement />
-      <Navbar />
-      <FormConteiner>
-        <LoginConteiner>
-          <Header>User Sign In</Header>
-          <InnerFormConteiner>
-            <div style={{ backgroundColor: "gray" }}>
-              <MailOutlineIcon
-                style={{ fontSize: "40px", color: "white", padding: "8px" }}
-              />
-            </div>
-            <Input
-              placeholder="E-mail"
-              name="email"
-              value={inputs.email}
-              onChange={setInputs}
-            ></Input>
-          </InnerFormConteiner>
+    <MainLayout>
+      <Conteiner>
+        <FormConteiner>
+          <LoginConteiner>
+            <Header>User Sign In</Header>
+            <InnerFormConteiner>
+              <div style={{ backgroundColor: "gray" }}>
+                <MailOutlineIcon
+                  style={{ fontSize: "40px", color: "white", padding: "8px" }}
+                />
+              </div>
+              <Input
+                placeholder="E-mail"
+                name="email"
+                value={inputs.email}
+                onChange={setInputs}
+              ></Input>
+            </InnerFormConteiner>
 
-          <InnerFormConteiner>
-            <div style={{ backgroundColor: "gray" }}>
-              <PasswordIcon
-                style={{ fontSize: "40px", color: "white", padding: "8px" }}
-              />
-            </div>
-            <Input
-              placeholder="password"
-              type="password"
-              name="password"
-              value={inputs.password}
-              onChange={setInputs}
-            ></Input>
-          </InnerFormConteiner>
-          <InnerFormConteiner>
-            <Button
-              onClick={() => {
-                handleLogin();
-              }}
-            >
-              Sign In
-            </Button>
-          </InnerFormConteiner>
-        </LoginConteiner>
-        <LoginConteiner>
-          <Header>Continue Without Sign in</Header>
+            <InnerFormConteiner>
+              <div style={{ backgroundColor: "gray" }}>
+                <PasswordIcon
+                  style={{ fontSize: "40px", color: "white", padding: "8px" }}
+                />
+              </div>
+              <Input
+                placeholder="password"
+                type="password"
+                name="password"
+                value={inputs.password}
+                onChange={setInputs}
+              ></Input>
+            </InnerFormConteiner>
+            <InnerFormConteiner>
+              <Button
+                onClick={() => {
+                  handleLogin();
+                }}
+              >
+                Sign In
+              </Button>
+            </InnerFormConteiner>
+          </LoginConteiner>
+          <LoginConteiner>
+            <Header>Continue Without Sign in</Header>
 
-          <InnerFormConteiner>
-            <div style={{ backgroundColor: "gray" }}>
-              <MailOutlineIcon
-                style={{ fontSize: "40px", color: "white", padding: "8px" }}
-              />
-            </div>
-            <Input
-              placeholder="E-mail"
-              type="email"
-              name="email"
-              value={inputs.email}
-              onChange={setInputs}
-            ></Input>
-          </InnerFormConteiner>
-          {inputs.emailError && (
-            <Error style={{ textAlign: "center" }}>E-mail is required</Error>
-          )}
+            <InnerFormConteiner>
+              <div style={{ backgroundColor: "gray" }}>
+                <MailOutlineIcon
+                  style={{ fontSize: "40px", color: "white", padding: "8px" }}
+                />
+              </div>
+              <Input
+                placeholder="E-mail"
+                type="email"
+                name="email"
+                value={inputs.email}
+                onChange={setInputs}
+              ></Input>
+            </InnerFormConteiner>
+            {inputs.emailError && (
+              <Error style={{ textAlign: "center" }}>E-mail is required</Error>
+            )}
 
-          <InnerFormConteiner>
-            <div style={{ backgroundColor: "gray" }}>
-              <LocalPhoneIcon
-                style={{ fontSize: "40px", color: "white", padding: "8px" }}
-              />
-            </div>
-            <Input
-              placeholder="Phone Number"
-              type="phone"
-              name="phone"
-              value={inputs.phone}
-              onChange={setInputs}
-            ></Input>
-          </InnerFormConteiner>
-          {inputs.phoneError && (
-            <Error style={{ textAlign: "center" }}>
-              Phone number is required
-            </Error>
-          )}
+            <InnerFormConteiner>
+              <div style={{ backgroundColor: "gray" }}>
+                <LocalPhoneIcon
+                  style={{ fontSize: "40px", color: "white", padding: "8px" }}
+                />
+              </div>
+              <Input
+                placeholder="Phone Number"
+                type="phone"
+                name="phone"
+                value={inputs.phone}
+                onChange={setInputs}
+              ></Input>
+            </InnerFormConteiner>
+            {inputs.phoneError && (
+              <Error style={{ textAlign: "center" }}>
+                Phone number is required
+              </Error>
+            )}
 
-          <InnerFormConteiner>
-            <Button onClick={() => handleLoginAsGuest()}>Go Shopping</Button>
-          </InnerFormConteiner>
-        </LoginConteiner>
-      </FormConteiner>
-      <Footer />
-    </Conteiner>
+            <InnerFormConteiner>
+              <Button onClick={() => handleLoginAsGuest()}>Go Shopping</Button>
+            </InnerFormConteiner>
+          </LoginConteiner>
+        </FormConteiner>
+      </Conteiner>
+    </MainLayout>
   );
 };
 
