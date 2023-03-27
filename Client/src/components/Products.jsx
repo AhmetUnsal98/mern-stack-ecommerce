@@ -1,36 +1,38 @@
 import styled from "styled-components";
 import React, { useEffect } from "react";
 import Product from "./Product";
-import axios from "axios";
 import { useState } from "react";
+import { getAllProducts, getProductsByCategory } from "../api/fetchAPI";
 const Container = styled.div`
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 `;
-
 const Products = ({ cat, filters, sort }) => {
   //Create array for products
   const [products, setProducts] = useState([]);
   //Create array for filtered products
   const [filteredProducts, setFilteredProducts] = useState([]);
-
   //Fetch when cat has changed getProducts from api
   useEffect(() => {
-    const getProducts = async () => {
+    const fetch = async () => {
       try {
-        const res = await axios.get(
-          cat
-            ? `https://clothing-shop-ahmet-api.onrender.com/api/products?category=${cat}`
-            : `https://clothing-shop-ahmet-api.onrender.com/api/products/`
-        );
-        setProducts(res.data);
+        if (cat === undefined) {
+          console.log(cat);
+          await getAllProducts().then(function (result) {
+            setProducts(result);
+          });
+        } else {
+          await getProductsByCategory(cat).then(function (result) {
+            setProducts(result);
+          });
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    getProducts();
+    fetch();
   }, [cat, filters]);
   //Filter products by category , filters
   useEffect(() => {

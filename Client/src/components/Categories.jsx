@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import CategoryItem from "./CategoryItem";
-import { publicRequest } from "../requestMethods";
 import React, { useState, useEffect } from "react";
+import { getCategories } from "../api/fetchAPI";
 const Container = styled.div`
   display: flex;
-
   padding: 20px;
   justify-content: space-between;
 
@@ -20,15 +19,16 @@ const Categories = () => {
   const [categories, setCategory] = useState();
 
   useEffect(() => {
-    const getCategories = async () => {
+    const fetch = async () => {
       try {
-        const res = await publicRequest.get("/categories");
-        setCategory(res.data);
+        await getCategories().then(function (result) {
+          setCategory(result);
+        });
       } catch (error) {
         console.log(error);
       }
     };
-    getCategories();
+    fetch();
   }, []);
 
   return (

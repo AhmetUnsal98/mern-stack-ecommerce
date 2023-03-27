@@ -7,6 +7,7 @@ import { userRequest } from "../requestMethods";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import MainLayout from "../layouts/MainLayout";
+import { getUserOrders } from "../api/fetchAPI";
 const Conteiner = styled.div`
   height: 100vh;
   width: 100vw;
@@ -51,12 +52,12 @@ const UserOrders = () => {
   const userId = user._id;
 
   useEffect(() => {
-    const getUserOrder = async () => {
-      const res = await userRequest.get("/orders/find/" + userId);
-      console.log(res.data);
-      setOrder(res.data);
+    const fetch = async () => {
+      await getUserOrders(userId).then(function (result) {
+        setOrder(result);
+      });
     };
-    getUserOrder();
+    fetch();
   }, []);
 
   return (
