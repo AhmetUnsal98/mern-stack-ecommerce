@@ -36,7 +36,7 @@ const GeneralFormConteiner = styled.div`
 `;
 const FormConteiner = styled.div`
   width: 100%;
-  height: 100vh;
+  height: auto;
 
   display: flex;
   flex-direction: row;
@@ -44,12 +44,12 @@ const FormConteiner = styled.div`
 `;
 const LeftConteiner = styled.div`
   width: 50%;
-  height: 100vh;
+  height: auto;
   margin-top: 12px;
 `;
 const RightConteiner = styled.div`
   width: 45%;
-  height: 100vh;
+  height: auto;
   margin-top: 12px;
   margin-left: 24px;
   ${mobile({ width: "90%", marginLeft: "2px" })}
