@@ -1,8 +1,8 @@
-import { userRequest } from "../requestMethods";
+import { publicRequest } from "../requestMethods";
 
 export const createOrder = async (order) => {
   try {
-    const res = await userRequest.post("/createOrder", order);
+    const res = await publicRequest.post("/createOrder", order);
     return res.data;
   } catch (error) {
     console.log(error);

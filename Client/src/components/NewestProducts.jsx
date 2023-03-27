@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import Product from "./Product";
 import React, { useState } from "react";
-import { userRequest } from "../requestMethods";
+import { publicRequest } from "../requestMethods";
 const Container = styled.div`
   padding: 20px;
   display: flex;
@@ -18,7 +18,7 @@ const NewestProducts = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const res = await userRequest.get(`products?new="ss`);
+        const res = await publicRequest.get(`products?new="ss`);
         setProducts(res.data);
       } catch (error) {
         console.log(error);

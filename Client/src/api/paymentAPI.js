@@ -1,17 +1,29 @@
-import { userRequest } from "../requestMethods";
+import { publicRequest } from "../requestMethods";
 
-export const paymentNormal = async (paymentInformations) => {
+export const paymentNormal = async (paymentInformations, token) => {
   try {
-    const res = await userRequest.post("/payment", paymentInformations);
+    const res = await publicRequest.post("/payment", paymentInformations, {
+      headers: {
+        token: token,
+      },
+    });
     return res.data;
   } catch (error) {
     console.log(error);
     return null;
   }
 };
-export const paymentThreeDs = async (paymentInformations) => {
+export const paymentThreeDs = async (paymentInformations, token) => {
   try {
-    const res = await userRequest.post("/payment/threeds", paymentInformations);
+    const res = await publicRequest.post(
+      "/payment/threeds",
+      paymentInformations,
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
     return res.data;
   } catch (error) {
     console.log(error);

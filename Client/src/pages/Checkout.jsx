@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { userRequest } from "../requestMethods";
 import Odemeimage from "../assets/odeme.png";
 import Iyzicoimage from "../assets/iyzico.png";
 import Sslimage from "../assets/ssl.png";
@@ -162,6 +161,7 @@ const ImageConteiner = styled.div`
 const Checkout = () => {
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user.currentUser);
+  const token = user.accessToken;
   const [inputs, setInputs] = useInputs({
     firstName: "",
     firstNameError: false,
@@ -262,8 +262,8 @@ const Checkout = () => {
       },
     };
     try {
-      await paymentNormal(paymentInformations).then(function (result) {
-        if (result.data.status === "success") {
+      await paymentNormal(paymentInformations, token).then(function (result) {
+        if (result.status === "success") {
           handleCreateOrder();
           dispatch(clearAllCart());
           history.push("/success");
@@ -276,7 +276,7 @@ const Checkout = () => {
     }
   };
 
-  //Get ThreeDs paymen
+  //Get ThreeDs payment
   const handlePaymentThreeDs = async (e) => {
     setProducts(cart.products);
     const paymentInformations = {
@@ -318,9 +318,10 @@ const Checkout = () => {
     };
     try {
       paymentThreeDs(paymentInformations).then(function (result) {
-        if (result.data) {
+        console.log(result);
+        if (result) {
           var x = window.open();
-          x.document.open().write(result.data);
+          x.document.open().write(result);
           handleCreateOrder();
           dispatch(clearAllCart());
           history.push("/");
