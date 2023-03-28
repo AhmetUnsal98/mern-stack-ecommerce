@@ -307,12 +307,12 @@ const Navbar = () => {
           </Center>
           <Right>
             {user ? null : (
-              <Link to="/register">
+              <Link style={{ textDecoration: "none" }} to="/register">
                 <MenuItem>SIGN UP</MenuItem>
               </Link>
             )}
             {user ? null : (
-              <Link to="/login">
+              <Link style={{ textDecoration: "none" }} to="/login">
                 <MenuItem>SIGN IN</MenuItem>
               </Link>
             )}
@@ -326,14 +326,14 @@ const Navbar = () => {
             {user && <MenuItemUsername>{user.name}</MenuItemUsername>}
 
             {user && (
-              <Link to="/userorders">
+              <Link style={{ textDecoration: "none" }} to="/userorders">
                 <MenuItem>My Orders</MenuItem>
               </Link>
             )}
             {user && <MenuItem>My Supports</MenuItem>}
             {user && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
 
-            <Link to="/cart">
+            <Link style={{ textDecoration: "none" }} to="/cart">
               <MenuItem>
                 <Badge overlap="rectangular" badgeContent={quantity}>
                   <ShoppingCartOutlined />
@@ -349,7 +349,7 @@ const Navbar = () => {
               size={30}
               color="black"
             />
-            <Link to="/cart">
+            <Link style={{ textDecoration: "none" }} to="/cart">
               <MenuItem>
                 <Badge overlap="rectangular" badgeContent={quantity}>
                   <ShoppingCartOutlined />

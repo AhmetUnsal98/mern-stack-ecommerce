@@ -7,12 +7,12 @@ import Odemeimage from "../assets/odeme.png";
 import Iyzicoimage from "../assets/iyzico.png";
 import Sslimage from "../assets/ssl.png";
 import { clearAllCart } from "../redux/cartRedux";
-import Modal from "react-modal";
 import { useHistory } from "react-router-dom";
 import { useInputs } from "../hooks/useInputs";
 import MainLayout from "../layouts/MainLayout";
 import { paymentNormal, paymentThreeDs } from "../api/paymentAPI";
 import { createOrder } from "../api/orderAPI";
+import { CloseSharp } from "@material-ui/icons";
 const Conteiner = styled.div`
   width: 100vw;
   height: auto;
@@ -32,6 +32,7 @@ const GeneralFormConteiner = styled.div`
   height: auto;
   margin-top: 14px;
   margin-left: 24px;
+  ${(props) => (props.bg === true ? "opacity:0.4" : "opacity:1")};
   ${mobile({ marginTop: "6px", marginLeft: "6px" })}
 `;
 const FormConteiner = styled.div`
@@ -46,6 +47,7 @@ const LeftConteiner = styled.div`
   width: 50%;
   height: auto;
   margin-top: 12px;
+  ${mobile({ width: "100%" })}
 `;
 const RightConteiner = styled.div`
   width: 45%;
@@ -57,7 +59,7 @@ const RightConteiner = styled.div`
 const SummaryConteiner = styled.div`
   width: 100%;
   height: auto;
-  border: 2px solid lightgray;
+  border-bottom: 1px solid lightgray;
   display: flex;
   flex-direction: column;
   border-radius: 6px;
@@ -72,7 +74,7 @@ const CartConteiner = styled.div`
 const ItemConteiner = styled.div`
   width: 100%;
   height: 40px;
-  border-bottom: 1px solid lightgray;
+  border: 1px solid lightgray;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -102,7 +104,8 @@ const InputConteiner = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 24px;
-  ${mobile({ marginTop: "12px" })}
+
+  ${mobile({ marginTop: "12px", width: "100%" })}
 `;
 const InputHeader = styled.p`
   font-size: 16px;
@@ -113,7 +116,15 @@ const Input = styled.input`
   height: 40px;
   border-radius: 8px;
   margin-top: 4px;
-  ${mobile({ height: "35px", width: "auto" })}
+  border: 2px solid lightgray;
+  ${mobile({ height: "35px", width: "90%" })}
+`;
+const InputAddress = styled.input`
+  height: 40px;
+  border-radius: 8px;
+  margin-top: 4px;
+  border: 2px solid lightgray;
+  ${mobile({ height: "35px", width: "95vw" })}
 `;
 const HeaderOrderDetail = styled.h1`
   font-size: 26px;
@@ -128,6 +139,7 @@ const PayButton = styled.button`
   border: 0px;
   border-radius: 4px;
   font-size: 20px;
+  cursor: pointer;
   &:hover {
     background-color: teal;
     transition: 2s;
@@ -140,24 +152,82 @@ const Error = styled.p`
   font-size: 16px;
   color: red;
 `;
-
-const ModalConteiner = styled.div`
+const Modal = styled.div`
+  width: 50vw;
+  height: 70vh;
+  position: absolute;
+  left: 25%;
+  background-color: whitesmoke;
+  z-index: 999;
+  border-radius: 4px;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  ${(props) => (props.open === true ? "display:flex" : "display:none")};
+  ${mobile({ width: "95%", left: "0%" })}
+`;
+const UpperModal = styled.div`
+  width: 100%;
+  height: 10%;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+`;
+const ModalHeader = styled.h3``;
+const ModalFormContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
   align-items: center;
-  margin-top: 34px;
+  ${mobile({ alignItems: "flex-start" })}
 `;
-const UpperModal = styled.div`
+const ModalInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 0.5rem;
+  ${mobile({ margin: "0.2rem" })}
+`;
+const ModalInputContainerExp = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 0.5rem;
+  ${mobile({ margin: "0.2rem", padding: "0" })}
+`;
+const ModalInputHeader = styled.span`
+  font-weight: 550;
+  color: gray;
+  ${mobile({ fontSize: "12px" })}
+`;
+const ModalInput = styled.input`
+  border: 2px solid lightgray;
+  background-color: transparent;
+  height: 42px;
+  border-radius: 6px;
+`;
+const ModalInputExp = styled.input`
+  border: 2px solid lightgray;
+  background-color: transparent;
+  height: 42px;
+  border-radius: 6px;
+  ${mobile({ width: "100px", height: "42px" })}
+`;
+const ModalRowContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  width: 75%;
+  ${mobile({ width: "90%" })}
 `;
-const ImageConteiner = styled.div`
+const ModalImage = styled.img`
   width: 100%;
-  height: 100px;
+  height: 100%;
+  object-fit: contain;
 `;
-
 const Checkout = () => {
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user.currentUser);
@@ -191,17 +261,14 @@ const Checkout = () => {
     cvcError: false,
     installment: "",
   });
-
   const dispatch = useDispatch();
   const history = useHistory();
-  const [products, setProducts] = useState([]);
   const [installment, setInstallment] = useState();
   const [current, setCurrent] = useState(false);
   const [checkPrivacy, setCheckPrivacy] = useState(false);
   const [pageStart, setPageStart] = useState(false);
   const [error, setError] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   //Create a new Order
   const handleCreateOrder = async () => {
     const order = {
@@ -220,10 +287,8 @@ const Checkout = () => {
       console.log(error);
     }
   };
-
   //Get normal payment
   const handlePayment = async (e) => {
-    setProducts(cart.products);
     const paymentInformations = {
       price: cart.cartTotalAmount,
       basketId: user ? user._id : "1231231",
@@ -261,24 +326,26 @@ const Checkout = () => {
         zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
       },
     };
-    try {
-      await paymentNormal(paymentInformations, token).then(function (result) {
-        if (result.status === "success") {
-          handleCreateOrder();
-          dispatch(clearAllCart());
-          history.push("/success");
-        } else {
-          alert("Please check your payment informations");
-        }
-      });
-    } catch (error) {
-      console.log(error);
+    if (checkPrivacy) {
+      try {
+        await paymentNormal(paymentInformations, token).then(function (result) {
+          if (result.status === "success") {
+            handleCreateOrder();
+            dispatch(clearAllCart());
+            history.push("/success");
+          } else {
+            alert("Please check your payment informations");
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("Please check privacy box");
     }
   };
-
   //Get ThreeDs payment
   const handlePaymentThreeDs = async (e) => {
-    setProducts(cart.products);
     const paymentInformations = {
       price: cart.cartTotalAmount,
       basketId: user ? user._id : "1231231",
@@ -316,19 +383,23 @@ const Checkout = () => {
         zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
       },
     };
-    try {
-      paymentThreeDs(paymentInformations).then(function (result) {
-        console.log(result);
-        if (result) {
-          var x = window.open();
-          x.document.open().write(result);
-          handleCreateOrder();
-          dispatch(clearAllCart());
-          history.push("/");
-        }
-      });
-    } catch (error) {
-      console.log(error);
+    if (checkPrivacy) {
+      try {
+        paymentThreeDs(paymentInformations).then(function (result) {
+          console.log(result);
+          if (result) {
+            var x = window.open();
+            x.document.open().write(result);
+            handleCreateOrder();
+            dispatch(clearAllCart());
+            history.push("/");
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("Please check privacy box");
     }
   };
   //Show for another billing inputs
@@ -347,212 +418,114 @@ const Checkout = () => {
       setCheckPrivacy(false);
     }
   };
-
-  useEffect(() => {
-    Modal.setAppElement("body");
-  }, []);
+  const handleOpenModal = () => {
+    if (modalIsOpen) {
+      setModalIsOpen(false);
+    } else {
+      setModalIsOpen(true);
+    }
+  };
+  useEffect(() => {}, []);
 
   return (
     <MainLayout>
       <Conteiner>
-        <GeneralFormConteiner>
-          <Modal
-            isOpen={modalIsOpen}
-            parentSelector={() => document.querySelector("#root")}
-          >
-            <UpperModal>
-              <p></p>
-              <h1>Payment Informations</h1>
-              <button
-                onClick={() => {
-                  setModalIsOpen(false);
-                }}
-                style={{
-                  backgroundColor: "transparent",
-                  border: "0px solid lightgray",
-                  fontSize: "24px",
-                }}
-              >
-                X
-              </button>
-            </UpperModal>
-            <ModalConteiner>
-              <div
-                style={{ display: "flex", flexDirection: "row", width: "40%" }}
-              >
-                <InputConteiner>
-                  <InputHeader>Card Name</InputHeader>
-                  <Input
-                    name="cardName"
-                    value={inputs.cardName}
-                    onChange={setInputs}
-                  ></Input>
-                  {inputs.cardNameError && (
-                    <Error>Please enter your firstname</Error>
-                  )}
-                </InputConteiner>
-                <InputConteiner style={{ marginLeft: "12px" }}>
-                  <InputHeader>Card Number</InputHeader>
-                  <Input
-                    id="ccn"
-                    type="tel"
-                    inputmode="numeric"
-                    pattern="[0-9\s]{13,19}"
-                    autocomplete="cc-number"
-                    maxlength="19"
-                    placeholder="xxxx xxxx xxxx xxxx"
-                    name="cardNumber"
-                    value={inputs.cardNumber}
-                    onChange={setInputs}
-                  ></Input>
-                  {inputs.cardNumberError && (
-                    <Error>Please enter your firstname</Error>
-                  )}
-                </InputConteiner>
-              </div>
-              <div
-                style={{ display: "flex", flexDirection: "row", width: "40%" }}
-              >
-                <InputConteiner>
-                  <InputHeader>Expiration Month</InputHeader>
-                  <Input
-                    name="expirationMonth"
-                    value={inputs.expirationMonth}
-                    onChange={setInputs}
-                  ></Input>
-                  {inputs.expirationMonthError && (
-                    <Error>Please enter your expirationMonth</Error>
-                  )}
-                </InputConteiner>
-                <InputConteiner style={{ marginLeft: "12px" }}>
-                  <InputHeader>Expiration Year</InputHeader>
-                  <Input
-                    name="expirationYear"
-                    value={inputs.expirationYear}
-                    onChange={setInputs}
-                  ></Input>
-                  {inputs.expirationYearError && (
-                    <Error>Please enter your expirationYear</Error>
-                  )}
-                </InputConteiner>
-                <InputConteiner style={{ marginLeft: "12px" }}>
-                  <InputHeader>CVC</InputHeader>
-                  <Input
-                    name="cvc"
-                    value={inputs.cvc}
-                    onChange={setInputs}
-                  ></Input>
-                  {inputs.cvcError && <Error>Please enter your cvc</Error>}
-                </InputConteiner>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  marginTop: "12px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <input
-                  type="checkbox"
-                  defaultChecked={checkPrivacy}
-                  style={{
-                    marginRight: "24px",
-                    height: "25px",
-                    border: "1px solid black",
-                  }}
-                  onClick={() => setCheckPrivacy(!checkPrivacy)}
-                ></input>
-                <label style={{ fontSize: "16px", fontWeight: "700" }}>
-                  Ön Bilgilendirme Formu'nu ve Mesafeli Satış Sözleşmesi 'ni
-                  onaylıyorum.
-                </label>
-              </div>
-              <div
-                style={{ display: "flex", flexDirection: "row", width: "40%" }}
-              >
-                <InputConteiner style={{ flex: "1" }}>
-                  <select
-                    style={{
-                      height: "60px",
-                      textAlign: "center",
-                      fontSize: "16px",
-                    }}
-                    onChange={(e) => setInstallment(e.target.value)}
-                  >
-                    <option value=" disabled">Taksit Seç</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>6</option>
-                    <option>9</option>
-                    <option>12</option>
-                  </select>
-                </InputConteiner>
-                <InputConteiner style={{ marginLeft: "12px", flex: "2" }}>
-                  <PayButton
-                    onClick={() => {
-                      handlePayment();
-                    }}
-                  >
-                    Go Pay Normal
-                  </PayButton>
-                </InputConteiner>
-                <InputConteiner style={{ marginLeft: "12px", flex: "2" }}>
-                  <PayButton
-                    onClick={() => {
-                      handlePaymentThreeDs();
-                    }}
-                  >
-                    Go Pay With 3D Secure
-                  </PayButton>
-                </InputConteiner>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  width: "35%",
-                  marginTop: "24px",
-                }}
-              >
-                <ImageConteiner>
-                  <img
-                    src={Iyzicoimage}
-                    style={{ width: "100%", height: "100%", objectFit: "fill" }}
-                  ></img>
-                </ImageConteiner>
-                <ImageConteiner>
-                  <img
-                    src={Odemeimage}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "fill",
-                      marginLeft: "12px",
-                    }}
-                  ></img>
-                </ImageConteiner>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  width: "25%",
-                  marginTop: "12px",
-                }}
-              >
-                <ImageConteiner>
-                  <img
-                    src={Sslimage}
-                    style={{ width: "100%", height: "100%", objectFit: "fill" }}
-                  ></img>
-                </ImageConteiner>
-              </div>
-            </ModalConteiner>
-          </Modal>
-
+        <Modal open={modalIsOpen}>
+          <UpperModal>
+            <ModalHeader></ModalHeader>
+            <ModalHeader>Payment Informations</ModalHeader>
+            <CloseSharp
+              style={{ cursor: "pointer" }}
+              onClick={handleOpenModal}
+              size={25}
+              color="black"
+            />
+          </UpperModal>
+          <ModalFormContainer>
+            <ModalRowContainer>
+              <ModalInputContainer>
+                <ModalInputHeader>Card Name</ModalInputHeader>
+                <ModalInput
+                  name="cardName"
+                  value={inputs.cardName}
+                  onChange={setInputs}
+                ></ModalInput>
+              </ModalInputContainer>
+              <ModalInputContainer>
+                <ModalInputHeader>Card Number</ModalInputHeader>
+                <ModalInput
+                  name="cardNumber"
+                  value={inputs.cardNumber}
+                  onChange={setInputs}
+                ></ModalInput>
+              </ModalInputContainer>
+            </ModalRowContainer>
+            <ModalRowContainer>
+              <ModalInputContainerExp>
+                <ModalInputHeader>Month</ModalInputHeader>
+                <ModalInputExp
+                  name="expirationMonth"
+                  value={inputs.expirationMonth}
+                  onChange={setInputs}
+                ></ModalInputExp>
+              </ModalInputContainerExp>
+              <ModalInputContainerExp>
+                <ModalInputHeader>Year</ModalInputHeader>
+                <ModalInputExp
+                  name="expirationYear"
+                  value={inputs.expirationYear}
+                  onChange={setInputs}
+                ></ModalInputExp>
+              </ModalInputContainerExp>
+              <ModalInputContainerExp>
+                <ModalInputHeader>CVC ?</ModalInputHeader>
+                <ModalInputExp
+                  name="cvc"
+                  value={inputs.cvc}
+                  onChange={setInputs}
+                ></ModalInputExp>
+              </ModalInputContainerExp>
+            </ModalRowContainer>
+            <ModalRowContainer>
+              <input
+                style={{ margin: "0.5rem", width: "18px", height: "18px" }}
+                type="checkbox"
+              ></input>
+              <p style={{ margin: "0.5rem" }}>
+                Ön Bilgilendirme Formu'nu ve Mesafeli Satış Sözleşmesi 'ni
+                onaylıyorum.
+              </p>
+            </ModalRowContainer>
+            <ModalRowContainer>
+              <ModalInputContainer>
+                <PayButton onClick={handlePayment}>
+                  <p style={{ margin: "0.2rem" }}>Pay </p>
+                  <p style={{ margin: "0.2rem" }}>{cart.cartTotalAmount}$</p>
+                </PayButton>
+              </ModalInputContainer>
+              <ModalInputContainer>
+                <PayButton onClick={handlePaymentThreeDs}>
+                  <p style={{ margin: "0.2rem" }}>Pay with 3D </p>
+                  <p style={{ margin: "0.2rem" }}>{cart.cartTotalAmount}$</p>
+                </PayButton>
+              </ModalInputContainer>
+            </ModalRowContainer>
+            <ModalRowContainer>
+              <ModalInputContainer>
+                <ModalImage src={Sslimage}></ModalImage>
+              </ModalInputContainer>
+              <ModalInputContainer>
+                {" "}
+                <ModalImage src={Iyzicoimage}></ModalImage>
+              </ModalInputContainer>
+              <ModalInputContainer>
+                {" "}
+                <ModalImage src={Odemeimage}></ModalImage>
+              </ModalInputContainer>
+            </ModalRowContainer>
+          </ModalFormContainer>
+        </Modal>
+        <GeneralFormConteiner bg={modalIsOpen}>
           <Header>Checkout</Header>
           <Divider></Divider>
           <FormConteiner>
@@ -584,11 +557,11 @@ const Checkout = () => {
               <HeaderOrderDetail>Shipping Address</HeaderOrderDetail>
               <InputConteiner>
                 <InputHeader>Address</InputHeader>
-                <Input
+                <InputAddress
                   name="address"
                   value={inputs.address}
                   onChange={setInputs}
-                ></Input>
+                ></InputAddress>
                 {inputs.addressError && (
                   <Error>Please enter your address</Error>
                 )}
@@ -597,33 +570,33 @@ const Checkout = () => {
                 <InputConteiner>
                   <InputHeader>Country</InputHeader>
 
-                  <Input
+                  <InputAddress
                     name="country"
                     value={inputs.country}
                     onChange={setInputs}
-                  ></Input>
+                  ></InputAddress>
                   {inputs.countryError && (
                     <Error>Please enter your country name</Error>
                   )}
                 </InputConteiner>
                 <InputConteiner style={{}}>
                   <InputHeader>City</InputHeader>
-                  <Input
+                  <InputAddress
                     name="city"
                     value={inputs.city}
                     onChange={setInputs}
-                  ></Input>
+                  ></InputAddress>
                   {inputs.cityError && (
                     <Error>Please enter your city name</Error>
                   )}
                 </InputConteiner>
                 <InputConteiner style={{}}>
                   <InputHeader>ZipCode</InputHeader>
-                  <Input
+                  <InputAddress
                     name="zipCode"
                     value={inputs.zipCode}
                     onChange={setInputs}
-                  ></Input>
+                  ></InputAddress>
                   {inputs.zipCodeError && (
                     <Error>Please enter your zipcode</Error>
                   )}
@@ -655,36 +628,36 @@ const Checkout = () => {
                 <HeaderOrderDetail>Billing Address</HeaderOrderDetail>
                 <InputConteiner>
                   <InputHeader>Address</InputHeader>
-                  <Input
+                  <InputAddress
                     name="address"
                     value={inputs.address}
                     onChange={setInputs}
-                  ></Input>
+                  ></InputAddress>
                 </InputConteiner>
                 <div style={{}}>
                   <InputConteiner>
                     <InputHeader>Country</InputHeader>
-                    <Input
+                    <InputAddress
                       name="country"
                       value={inputs.country}
                       onChange={setInputs}
-                    ></Input>
+                    ></InputAddress>
                   </InputConteiner>
                   <InputConteiner style={{}}>
                     <InputHeader>City</InputHeader>
-                    <Input
+                    <InputAddress
                       name="city"
                       value={inputs.city}
                       onChange={setInputs}
-                    ></Input>
+                    ></InputAddress>
                   </InputConteiner>
                   <InputConteiner style={{}}>
                     <InputHeader>ZipCode</InputHeader>
-                    <Input
+                    <InputAddress
                       name="zipCode"
                       value={inputs.zipCode}
                       onChange={setInputs}
-                    ></Input>
+                    ></InputAddress>
                   </InputConteiner>
                 </div>
               </div>
