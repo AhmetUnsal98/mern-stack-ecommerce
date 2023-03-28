@@ -28,7 +28,7 @@ const Divider = styled.div`
   border: 0.5px solid lightgray;
 `;
 const GeneralFormConteiner = styled.div`
-  width: 100vw;
+  width: 95vw;
   height: auto;
   margin-top: 14px;
   margin-left: 24px;
@@ -36,7 +36,7 @@ const GeneralFormConteiner = styled.div`
   ${mobile({ marginTop: "6px", marginLeft: "6px" })}
 `;
 const FormConteiner = styled.div`
-  width: 100%;
+  width: 95vw;
   height: auto;
 
   display: flex;
@@ -105,7 +105,7 @@ const InputConteiner = styled.div`
   flex-direction: column;
   margin-top: 24px;
 
-  ${mobile({ marginTop: "12px", width: "100%" })}
+  ${mobile({ marginTop: "12px", width: "90%" })}
 `;
 const InputHeader = styled.p`
   font-size: 16px;
@@ -124,7 +124,7 @@ const InputAddress = styled.input`
   border-radius: 8px;
   margin-top: 4px;
   border: 2px solid lightgray;
-  ${mobile({ height: "35px", width: "95vw" })}
+  ${mobile({ height: "35px", width: "90vw" })}
 `;
 const HeaderOrderDetail = styled.h1`
   font-size: 26px;
@@ -175,6 +175,7 @@ const UpperModal = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
+  ${mobile({ width: "95%" })}
 `;
 const ModalHeader = styled.h3``;
 const ModalFormContainer = styled.div`
@@ -221,6 +222,7 @@ const ModalRowContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 75%;
+  justify-content: space-between;
   ${mobile({ width: "90%" })}
 `;
 const ModalImage = styled.img`
