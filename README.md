@@ -1,8 +1,7 @@
-# mern-stack-ecommerce
+Live Demo : https://ecommerce-ahmet-clothing.netlify.app/
 FRONTEND : HTML , CSS , JAVASCRIPT , REACT , STYLED-COMPONENTS
 BACKEND : NODE.JS , EXPRESS.JS , MONGODB , JWT
 Fullstack ready to use //  deployed // backend using render.com server client using netlify server
-https://ecommerce-ahmet-clothing.netlify.app/
 ![Screenshot_1](https://user-images.githubusercontent.com/66937298/229706590-4a508497-a163-4ca1-a018-f5d959ed8faf.png)![Screenshot_10](https://user-images.githubusercontent.com/66937298/229706683-26457184-61aa-42b2-b434-0797da76af43.png)
 ![Screenshot_2](https://user-images.githubusercontent.com/66937298/229706610-9da51ecf-1b68-4bb2-96bc-0fd715724abd.png)
 ![Screenshot_3](https://user-images.githubusercontent.com/66937298/229706620-53969e3b-bc1a-4482-8431-17a21fa90d47.png)
