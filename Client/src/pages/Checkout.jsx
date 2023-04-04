@@ -1,7 +1,7 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Odemeimage from "../assets/odeme.png";
 import Iyzicoimage from "../assets/iyzico.png";

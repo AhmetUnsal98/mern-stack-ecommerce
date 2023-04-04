@@ -95,7 +95,7 @@ export default (router) => {
   });
 
   //Complete 3d payment
-  router.post("/payment/threeds/complete", async (req, res) => {
+  router.post("/payment/threeds/complete", verifyToken, async (req, res) => {
     try {
       const data = {
         locale: Iyzipay.LOCALE.TR,
