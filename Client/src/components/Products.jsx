@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import Product from "./Product";
 import { useState } from "react";
 import { getAllProducts, getProductsByCategory } from "../api/fetchAPI";
+import Loader from "./Shared/Loader";
 const Container = styled.div`
   padding: 20px;
   display: flex;
@@ -10,6 +11,7 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 const Products = ({ cat, filters, sort }) => {
+  const [loading, setLoading] = useState(true);
   //Create array for products
   const [products, setProducts] = useState([]);
   //Create array for filtered products
@@ -22,10 +24,12 @@ const Products = ({ cat, filters, sort }) => {
           console.log(cat);
           await getAllProducts().then(function (result) {
             setProducts(result);
+            setLoading(false);
           });
         } else {
           await getProductsByCategory(cat).then(function (result) {
             setProducts(result);
+            setLoading(false);
           });
         }
       } catch (error) {
@@ -65,9 +69,13 @@ const Products = ({ cat, filters, sort }) => {
 
   return (
     <Container>
-      {filters
-        ? filteredProducts.map((item) => <Product item={item} key={item._id} />)
-        : products.map((item) => <Product item={item} key={item._id} />)}
+      {loading == true ? (
+        <Loader></Loader>
+      ) : filters ? (
+        filteredProducts.map((item) => <Product item={item} key={item._id} />)
+      ) : (
+        products.map((item) => <Product item={item} key={item._id} />)
+      )}
     </Container>
   );
 };

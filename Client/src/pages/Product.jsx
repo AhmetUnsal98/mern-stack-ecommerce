@@ -5,9 +5,11 @@ import { mobile } from "../responsive";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { publicRequest } from "../requestMethods";
+import { getProductById } from "../api/fetchAPI";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../layouts/MainLayout";
+import Loader from "../components/Shared/Loader";
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -98,6 +100,7 @@ const Button = styled.button`
   }
 `;
 const Product = () => {
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [product, setProduct] = useState({});
@@ -110,8 +113,10 @@ const Product = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await publicRequest.get("/products/find/" + id);
-        setProduct(res.data);
+        await getProductById().then(function (result) {
+          setProduct(res.data);
+          setLoading(false);
+        });
       } catch (error) {
         console.log(error);
       }
@@ -136,43 +141,47 @@ const Product = () => {
   };
   return (
     <MainLayout>
-      <Container>
-        <Wrapper>
-          <ImgContainer>
-            <Image src={product.image} />
-          </ImgContainer>
-          <InfoContainer>
-            <Title>{product.title}</Title>
-            <Desc>{product.desc}</Desc>
-            <Price>$ {product.price}</Price>
-            <FilterContainer>
-              <Filter>
-                <FilterTitle>Size</FilterTitle>
-                <FilterSize onChange={(e) => setSize(e.target.value)}>
-                  {product.size?.map((s) => (
-                    <FilterSizeOption key={s}>
-                      {s.toUpperCase()}
-                    </FilterSizeOption>
-                  ))}
-                </FilterSize>
-              </Filter>
-            </FilterContainer>
-            <AddContainer>
-              <AmountContainer>
-                <Remove onClick={() => handleQuantity("dec")} />
-                <Amount>{cartQuantity}</Amount>
-                <Add onClick={() => handleQuantity("inc")} />
-              </AmountContainer>
-              <Button onClick={() => handleClick()}>ADD TO CART</Button>
-            </AddContainer>
-            {product.stock > 0 ? (
-              <Desc>Stokta var</Desc>
-            ) : (
-              <Desc>Stokta yok</Desc>
-            )}
-          </InfoContainer>
-        </Wrapper>
-      </Container>
+      {loading == true ? (
+        <Loader></Loader>
+      ) : (
+        <Container>
+          <Wrapper>
+            <ImgContainer>
+              <Image src={product.image} />
+            </ImgContainer>
+            <InfoContainer>
+              <Title>{product.title}</Title>
+              <Desc>{product.desc}</Desc>
+              <Price>$ {product.price}</Price>
+              <FilterContainer>
+                <Filter>
+                  <FilterTitle>Size</FilterTitle>
+                  <FilterSize onChange={(e) => setSize(e.target.value)}>
+                    {product.size?.map((s) => (
+                      <FilterSizeOption key={s}>
+                        {s.toUpperCase()}
+                      </FilterSizeOption>
+                    ))}
+                  </FilterSize>
+                </Filter>
+              </FilterContainer>
+              <AddContainer>
+                <AmountContainer>
+                  <Remove onClick={() => handleQuantity("dec")} />
+                  <Amount>{cartQuantity}</Amount>
+                  <Add onClick={() => handleQuantity("inc")} />
+                </AmountContainer>
+                <Button onClick={() => handleClick()}>ADD TO CART</Button>
+              </AddContainer>
+              {product.stock > 0 ? (
+                <Desc>Stokta var</Desc>
+              ) : (
+                <Desc>Stokta yok</Desc>
+              )}
+            </InfoContainer>
+          </Wrapper>
+        </Container>
+      )}
     </MainLayout>
   );
 };

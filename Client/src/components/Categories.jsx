@@ -3,10 +3,11 @@ import { mobile } from "../responsive";
 import CategoryItem from "./CategoryItem";
 import React, { useState, useEffect } from "react";
 import { getCategories } from "../api/fetchAPI";
+import Loader from "./Shared/Loader";
 const Container = styled.div`
   display: flex;
   padding: 20px;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   ${mobile({
     padding: "0px",
@@ -14,11 +15,7 @@ const Container = styled.div`
     flexDirection: "column",
   })}
 `;
-const Loading = styled.p`
-  color: black;
-  font-size: 22px;
-  text-align: center;
-`;
+
 const Categories = () => {
   const [categories, setCategory] = useState();
   const [loading, setLoading] = useState(true);
@@ -40,7 +37,7 @@ const Categories = () => {
   return (
     <Container>
       {loading == true ? (
-        <Loading>Loading</Loading>
+        <Loader></Loader>
       ) : (
         categories?.map((item) =>
           item.isInHome != "false" ? (

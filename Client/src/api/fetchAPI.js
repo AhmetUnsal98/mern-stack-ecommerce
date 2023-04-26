@@ -9,6 +9,16 @@ export const getAllProducts = async () => {
     return null;
   }
 };
+
+export const getProductById = async () => {
+  try {
+    const res = await publicRequest.get("/products/find/" + id);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 export const getProductsByCategory = async (category) => {
   try {
     const res = await publicRequest.get(`/products?category=${category}`);
