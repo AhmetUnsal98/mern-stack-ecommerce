@@ -7,22 +7,28 @@ const Container = styled.div`
   display: flex;
   padding: 20px;
   justify-content: space-between;
-
+  align-items: center;
   ${mobile({
     padding: "0px",
     display: "flex",
     flexDirection: "column",
   })}
 `;
-
+const Loading = styled.p`
+  color: black;
+  font-size: 22px;
+  text-align: center;
+`;
 const Categories = () => {
   const [categories, setCategory] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
       try {
         await getCategories().then(function (result) {
           setCategory(result);
+          setLoading(false);
         });
       } catch (error) {
         console.log(error);
@@ -33,10 +39,14 @@ const Categories = () => {
 
   return (
     <Container>
-      {categories?.map((item) =>
-        item.isInHome != "false" ? (
-          <CategoryItem item={item} key={item._id} />
-        ) : null
+      {loading == true ? (
+        <Loading>Loading</Loading>
+      ) : (
+        categories?.map((item) =>
+          item.isInHome != "false" ? (
+            <CategoryItem item={item} key={item._id} />
+          ) : null
+        )
       )}
     </Container>
   );
