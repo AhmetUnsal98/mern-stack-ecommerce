@@ -328,22 +328,19 @@ const Checkout = () => {
         zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
       },
     };
-    if (checkPrivacy) {
-      try {
-        await paymentNormal(paymentInformations, token).then(function (result) {
-          if (result.status === "success") {
-            handleCreateOrder();
-            dispatch(clearAllCart());
-            history.push("/success");
-          } else {
-            alert("Please check your payment informations");
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      alert("Please check privacy box");
+
+    try {
+      await paymentNormal(paymentInformations, token).then(function (result) {
+        if (result.status === "success") {
+          handleCreateOrder();
+          dispatch(clearAllCart());
+          history.push("/success");
+        } else {
+          alert("Please check your payment informations");
+        }
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
   //Get ThreeDs payment
@@ -385,23 +382,20 @@ const Checkout = () => {
         zipCode: inputs.zipCode /* Teslimat için Kullanıcının Posta Kodu */,
       },
     };
-    if (checkPrivacy) {
-      try {
-        paymentThreeDs(paymentInformations).then(function (result) {
-          console.log(result);
-          if (result) {
-            var x = window.open();
-            x.document.open().write(result);
-            handleCreateOrder();
-            dispatch(clearAllCart());
-            history.push("/");
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      alert("Please check privacy box");
+
+    try {
+      paymentThreeDs(paymentInformations).then(function (result) {
+        console.log(result);
+        if (result) {
+          var x = window.open();
+          x.document.open().write(result);
+          handleCreateOrder();
+          dispatch(clearAllCart());
+          history.push("/");
+        }
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
   //Show for another billing inputs
@@ -489,10 +483,6 @@ const Checkout = () => {
               </ModalInputContainerExp>
             </ModalRowContainer>
             <ModalRowContainer>
-              <input
-                style={{ margin: "0.5rem", width: "18px", height: "18px" }}
-                type="checkbox"
-              ></input>
               <p style={{ margin: "0.5rem" }}>
                 Ön Bilgilendirme Formu'nu ve Mesafeli Satış Sözleşmesi 'ni
                 onaylıyorum.
