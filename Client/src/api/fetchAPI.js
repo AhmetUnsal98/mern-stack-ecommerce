@@ -10,7 +10,7 @@ export const getAllProducts = async () => {
   }
 };
 
-export const getProductById = async () => {
+export const getProductById = async (id) => {
   try {
     const res = await publicRequest.get("/products/find/" + id);
     return res.data;

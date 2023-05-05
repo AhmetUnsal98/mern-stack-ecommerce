@@ -7,7 +7,7 @@ const Container = styled.div`
   height: 60px;
   width: 60px;
   animation: spin 2s linear infinite;
-  margin-left: 50%;
+
   @keyframes spin {
     0% {
       transform: rotate(0deg);

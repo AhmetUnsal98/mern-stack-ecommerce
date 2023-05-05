@@ -102,7 +102,7 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState();
   const [cartQuantity, setQuantity] = useState(1);
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user.currentUser);
@@ -112,7 +112,8 @@ const Product = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        await getProductById().then(function (result) {
+        await getProductById(id).then(function (result) {
+          console.log(result);
           setProduct(result);
           setLoading(false);
         });
@@ -138,6 +139,7 @@ const Product = () => {
       alert("Please select a size");
     }
   };
+  console.log(product);
   return (
     <MainLayout>
       {loading == true ? (
