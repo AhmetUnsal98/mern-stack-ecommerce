@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { publicRequest } from "../requestMethods";
 import { getProductById } from "../api/fetchAPI";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch, useSelector } from "react-redux";
@@ -114,7 +113,7 @@ const Product = () => {
     const getProduct = async () => {
       try {
         await getProductById().then(function (result) {
-          setProduct(res.data);
+          setProduct(result);
           setLoading(false);
         });
       } catch (error) {
