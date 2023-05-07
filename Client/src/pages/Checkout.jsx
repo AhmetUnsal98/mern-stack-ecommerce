@@ -384,7 +384,7 @@ const Checkout = () => {
     };
 
     try {
-      paymentThreeDs(paymentInformations).then(function (result) {
+      paymentThreeDs(paymentInformations, token).then(function (result) {
         console.log(result);
         if (result) {
           var x = window.open();
